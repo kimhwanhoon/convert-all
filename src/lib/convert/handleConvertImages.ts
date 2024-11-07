@@ -16,6 +16,16 @@ export const handleConvertImages = async (
     return;
   }
 
+  // 파일이 5개를 초과하면 에러 띄우기
+  if (files.length > 5) {
+    showNotification({
+      title: 'Error',
+      message: 'Maximum 5 files',
+      color: 'red',
+    });
+    return;
+  }
+
   if (!options.format) {
     showNotification({
       title: 'Error',

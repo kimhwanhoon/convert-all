@@ -5,6 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import { Upload } from 'lucide-react';
 import { useFileStore } from '@/store/fileStore';
 import { motion } from 'framer-motion';
+import { showNotification } from '@mantine/notifications';
 
 export default function FileDropzone() {
   const { files, setFiles } = useFileStore();
@@ -29,6 +30,17 @@ export default function FileDropzone() {
         (newFile) =>
           !currentFiles.some((prevFile) => prevFile.name === newFile.name)
       );
+
+      // 파일 총 개수가 5개를 초과하는지 확인
+      if (currentFiles.length + newFiles.length > 5) {
+        showNotification({
+          title: 'Error',
+          message: 'Maximum 5 files are allowed',
+          color: 'red',
+        });
+        return;
+      }
+
       setFiles([...currentFiles, ...newFiles]);
     },
     [files, setFiles]
@@ -46,7 +58,9 @@ export default function FileDropzone() {
         '.tiff',
         '.webp',
         '.avif',
-        '.heic',
+        '.svg',
+        '.ico',
+        '.pdf',
       ],
     },
   });

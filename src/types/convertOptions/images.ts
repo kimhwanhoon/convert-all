@@ -12,6 +12,6 @@ export const imageFormats = [
   { value: 'webp', label: 'WebP' },
   { value: 'avif', label: 'AVIF' },
   { value: 'tiff', label: 'TIFF' },
-  { value: 'heif', label: 'HEIF' },
   { value: 'raw', label: 'RAW' },
+  { value: 'heic', label: 'HEIC' },
 ];

@@ -34,7 +34,7 @@ export default function FileDropzone() {
     <div className="relative p-4">
       <div
         {...getRootProps()}
-        className={`relative z-10 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-indigo-400 bg-indigo-50/20 px-4 transition duration-500 hover:bg-indigo-200/30 ${
+        className={`relative z-10 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-indigo-400 bg-indigo-50/20 px-4 transition duration-500 hover:animate-pulse hover:bg-indigo-200/30 ${
           isDragActive ? 'border-indigo-400 bg-indigo-100/80' : ''
         }`}
       >

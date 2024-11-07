@@ -1,9 +1,10 @@
 'use client';
 
 import { useFileStore } from '@/store/fileStore';
-import { Checkbox, Progress } from '@mantine/core';
+import { Checkbox, Progress, Button } from '@mantine/core';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { Trash2 } from 'lucide-react';
 
 export const UploadedFIlesTable = () => {
   const { files } = useFileStore();
@@ -66,6 +67,18 @@ export const UploadedFIlesTable = () => {
           transition={{ duration: 0.5, ease: 'easeOut' }}
           className="mt-4"
         >
+          <div className="mb-2 flex items-center justify-between">
+            {selectedFiles.length > 0 && (
+              <Button
+                leftSection={<Trash2 size={16} />}
+                color="red"
+                variant="light"
+                size="sm"
+              >
+                선택된 파일 삭제 ({selectedFiles.length}개)
+              </Button>
+            )}
+          </div>
           <div className="overflow-x-auto rounded-lg border border-indigo-200 bg-white shadow-sm">
             <table className="min-w-full divide-y divide-indigo-200">
               <thead className="bg-indigo-50">
@@ -100,7 +113,13 @@ export const UploadedFIlesTable = () => {
                       {file.name}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900">
-                      {(file.size / 1024 / 1024).toFixed(2)} MB
+                      {/* 파일 크기 표시 
+                      크기가 1MB 미만이면 KB로 표시, 1MB 이상이면 MB로 표시
+                      KB일 때는 소수점 안 보이고, MB일 때는 소수점 둘째자리까지 보이게 표시
+                      */}
+                      {file.size / 1024 / 1024 < 1
+                        ? `${(file.size / 1024).toFixed(0)} KB`
+                        : `${(file.size / 1024 / 1024).toFixed(2)} MB`}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900">
                       {file.type}

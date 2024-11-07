@@ -1,5 +1,10 @@
-import React from 'react';
+import { cn } from '@/lib/utils/cn';
 
-export const Main = ({ children }: { children: React.ReactNode }) => {
-  return <main className="p-4">{children}</main>;
+interface MainProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export const Main = ({ children, className }: MainProps) => {
+  return <main className={cn('p-4', className)}>{children}</main>;
 };

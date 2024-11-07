@@ -34,7 +34,7 @@ export default function FileDropzone() {
     <div className="relative p-4">
       <div
         {...getRootProps()}
-        className={`relative z-10 flex h-64 w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-indigo-300 bg-indigo-50/80 bg-transparent px-4 transition hover:bg-indigo-100/80 ${
+        className={`relative z-10 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-indigo-400 bg-indigo-50/20 px-4 transition duration-500 hover:bg-indigo-200/30 ${
           isDragActive ? 'border-indigo-400 bg-indigo-100/80' : ''
         }`}
       >
@@ -42,11 +42,11 @@ export default function FileDropzone() {
         <Upload className="mb-4 h-10 w-10 text-indigo-500" />
         {isDragActive ? (
           <p className="text-center text-lg text-indigo-600">
-            파일을 여기에 놓아주세요...
+            Drop your files here...
           </p>
         ) : (
           <p className="text-center text-lg text-indigo-600">
-            파일을 드래그하여 놓거나 클릭하여 선택하세요
+            Drag and drop files here or click to select
           </p>
         )}
       </div>

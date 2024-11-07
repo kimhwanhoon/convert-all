@@ -65,7 +65,7 @@ export const UploadedFIlesTable = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="mt-4"
+          className="z-10 mt-4"
         >
           <div className="mb-2 flex items-center justify-between">
             {selectedFiles.length > 0 && (

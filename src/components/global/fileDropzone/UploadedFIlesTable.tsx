@@ -1,7 +1,7 @@
 'use client';
 
 import { useFileStore } from '@/store/fileStore';
-import { Checkbox, Progress, Button } from '@mantine/core';
+import { Checkbox, Progress, Button, Tooltip } from '@mantine/core';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Trash2 } from 'lucide-react';
@@ -75,7 +75,7 @@ export const UploadedFIlesTable = () => {
                 variant="light"
                 size="sm"
               >
-                선택된 파일 삭제 ({selectedFiles.length}개)
+                Delete selected files ({selectedFiles.length})
               </Button>
             )}
           </div>
@@ -84,16 +84,46 @@ export const UploadedFIlesTable = () => {
               <thead className="bg-indigo-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-sm font-medium text-indigo-500">
-                    선택
+                    <Tooltip
+                      label={
+                        selectedFiles.length === files.length
+                          ? 'Deselect All'
+                          : selectedFiles.length > 0 &&
+                              selectedFiles.length < files.length
+                            ? 'Deselect All'
+                            : 'Select All'
+                      }
+                    >
+                      <Checkbox
+                        indeterminate={
+                          selectedFiles.length > 0 &&
+                          selectedFiles.length < files.length
+                        }
+                        checked={selectedFiles.length === files.length}
+                        onChange={() => {
+                          if (
+                            selectedFiles.length === files.length ||
+                            (selectedFiles.length > 0 &&
+                              selectedFiles.length < files.length)
+                          ) {
+                            setSelectedFiles([]);
+                          } else {
+                            setSelectedFiles(files.map((_, i) => i.toString()));
+                          }
+                        }}
+                        color="indigo"
+                        radius="sm"
+                      />
+                    </Tooltip>
                   </th>
                   <th className="px-6 py-3 text-left text-sm font-medium text-indigo-500">
-                    파일명
+                    File Name
                   </th>
                   <th className="px-6 py-3 text-left text-sm font-medium text-indigo-500">
-                    크기
+                    Size
                   </th>
                   <th className="px-6 py-3 text-left text-sm font-medium text-indigo-500">
-                    타입
+                    Type
                   </th>
                 </tr>
               </thead>

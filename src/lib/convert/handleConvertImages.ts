@@ -46,10 +46,15 @@ export const handleConvertImages = async (
     formData.append(`file${index + 1}`, file);
   });
 
+  formData.append('apiKey', process.env.NEXT_PUBLIC_API_KEY || '');
+
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/convert/images`,
     {
       method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY || ''}`,
+      },
       body: formData,
     }
   );

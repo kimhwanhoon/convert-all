@@ -54,7 +54,7 @@ export default function FileDropzone() {
   return (
     <div className="relative p-4">
       <motion.div
-        {...getRootProps()}
+        {...getRootProps({})}
         animate={{ height: boxHeight === 'h-32' ? '8rem' : '16rem' }}
         transition={{ duration: 0.5 }}
         className={`relative z-10 flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-indigo-400 bg-indigo-50/20 px-4 transition duration-500 hover:bg-indigo-200/30 ${

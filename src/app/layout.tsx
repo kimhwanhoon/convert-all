@@ -8,6 +8,7 @@ import '@mantine/notifications/styles.css';
 // 전역 스타일 임포트
 import './globals.css';
 import { Header } from '@/components/header/Header';
+import { Notifications } from '@mantine/notifications';
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
       </head>
       <body className="mx-auto max-w-screen-xl antialiased">
         <ThemeProvider>
+          <Notifications position="top-center" />
           <Header />
           {children}
         </ThemeProvider>

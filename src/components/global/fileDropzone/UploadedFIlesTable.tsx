@@ -7,13 +7,14 @@ import { useEffect, useState } from 'react';
 import { Trash2 } from 'lucide-react';
 
 export const UploadedFIlesTable = () => {
-  const { files } = useFileStore();
+  const { files, setFiles } = useFileStore();
   const [progress, setProgress] = useState(0);
   const [showProgress, setShowProgress] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
+  const [progressEmitted, setProgressEmitted] = useState(false);
 
   useEffect(() => {
-    if (files.length > 0) {
+    if (!progressEmitted && files.length > 0) {
       // 즉시 프로그레스 표시 및 시작
       setShowProgress(true);
       setProgress(0);
@@ -26,9 +27,17 @@ export const UploadedFIlesTable = () => {
       // 프로그레스 완료 후 숨기기
       const hideTimer = setTimeout(() => {
         setShowProgress(false);
+        setProgressEmitted(true);
       }, 1000); // 전체 애니메이션 시간
 
       return () => clearTimeout(hideTimer);
+    }
+  }, [files.length, progressEmitted]);
+
+  useEffect(() => {
+    if (files.length === 0) {
+      setShowProgress(false);
+      setProgressEmitted(false);
     }
   }, [files.length]);
 
@@ -40,6 +49,13 @@ export const UploadedFIlesTable = () => {
         return [...prev, index];
       }
     });
+  };
+
+  const handleDeleteSelectedFiles = () => {
+    setFiles(
+      files.filter((_, index) => !selectedFiles.includes(index.toString()))
+    );
+    setSelectedFiles([]);
   };
 
   return (
@@ -74,6 +90,7 @@ export const UploadedFIlesTable = () => {
                 color="red"
                 variant="light"
                 size="sm"
+                onClick={handleDeleteSelectedFiles}
               >
                 Delete selected files ({selectedFiles.length})
               </Button>

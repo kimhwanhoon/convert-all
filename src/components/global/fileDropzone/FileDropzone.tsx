@@ -21,9 +21,18 @@ export default function FileDropzone() {
     }
   }, [files.length]);
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    setFiles(acceptedFiles);
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      // 기존 파일들을 가져와서 새 파일들과 중복 체크 후 병합
+      const currentFiles = files;
+      const newFiles = acceptedFiles.filter(
+        (newFile) =>
+          !currentFiles.some((prevFile) => prevFile.name === newFile.name)
+      );
+      setFiles([...currentFiles, ...newFiles]);
+    },
+    [files, setFiles]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,

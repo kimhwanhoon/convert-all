@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 const styles = {
   container: {
     base: 'cursor-pointer rounded-lg p-2',
@@ -12,7 +14,9 @@ export const Logo = () => {
     <div
       className={`${styles.container.base} ${styles.container.background} ${styles.container.hover}`}
     >
-      <span className={styles.text}>convert-all</span>
+      <Link href="/" className={styles.text}>
+        convert-all
+      </Link>
     </div>
   );
 };

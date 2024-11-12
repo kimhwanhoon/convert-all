@@ -54,14 +54,15 @@ export default function FileDropzone() {
         '.jpg',
         '.jpeg',
         '.gif',
-        '.bmp',
         '.tiff',
         '.webp',
         '.avif',
         '.svg',
-        '.ico',
-        '.pdf',
+        '.heic',
       ],
+    },
+    onError: (error) => {
+      console.error(error);
     },
   });
 
@@ -82,9 +83,15 @@ export default function FileDropzone() {
             Drop your files here...
           </p>
         ) : (
-          <p className="text-center text-lg text-indigo-600">
-            Drag and drop files here or click to select
-          </p>
+          <div>
+            <p className="text-center text-lg text-indigo-600">
+              Drag and drop files here or click to select
+            </p>
+            <p className="text-center text-xs text-gray-700">
+              (Size less than 10MB, supported file types: PNG, JPG, JPEG, GIF,
+              TIFF, WebP, AVIF, SVG, HEIC)
+            </p>
+          </div>
         )}
       </motion.div>
       <motion.div

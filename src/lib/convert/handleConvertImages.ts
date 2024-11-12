@@ -90,13 +90,7 @@ export const handleConvertImages = async (
     window.URL.revokeObjectURL(url);
     console.log('downloaded');
     // 로그 저장 요청
-    const { error, message } = await requestSaveLog();
-    console.log(error, message);
-
-    if (error) {
-      console.log(error);
-    }
-    console.log(message);
+    requestSaveLog();
 
     setIsLoading(false);
   } catch (error) {

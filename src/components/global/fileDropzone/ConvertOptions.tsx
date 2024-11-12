@@ -2,8 +2,12 @@
 
 import { handleConvertImages } from '@/lib/convert/handleConvertImages';
 import { useFileStore } from '@/store/fileStore';
-import { imageFormats } from '@/types/convertOptions/images';
-import { Button } from '@mantine/core';
+import {
+  icoSizes,
+  imageFormats,
+  normalRatios,
+} from '@/types/convertOptions/images';
+import { Accordion, Button } from '@mantine/core';
 import { NumberInput, Select, Slider } from '@mantine/core';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
@@ -13,15 +17,16 @@ interface ConvertOptionsProps {
 }
 
 export const ConvertOptions = ({ type }: ConvertOptionsProps) => {
-  const { files } = useFileStore();
-  const [isLoading, setIsLoading] = useState(false);
-  const [showOptions, setShowOptions] = useState(false);
-  const [width, setWidth] = useState<number | ''>('');
-  const [height, setHeight] = useState<number | ''>('');
-  const [selectedRatio, setSelectedRatio] = useState<string | null>(null);
-  const [searchValue, setSearchValue] = useState('');
-  const [quality, setQuality] = useState(80);
-  const [format, setFormat] = useState<string | null>(null);
+  const { files } = useFileStore(),
+    [isLoading, setIsLoading] = useState(false),
+    [showOptions, setShowOptions] = useState(false),
+    [width, setWidth] = useState<number | ''>(''),
+    [height, setHeight] = useState<number | ''>(''),
+    [selectedRatio, setSelectedRatio] = useState<string | null>(null),
+    [selectedIcoSize, setSelectedIcoSize] = useState<string | null>(null),
+    [quality, setQuality] = useState(80),
+    [format, setFormat] = useState<string | null>(null),
+    [isIco, setIsIco] = useState(false);
 
   useEffect(() => {
     if (files.length > 0) {
@@ -33,6 +38,14 @@ export const ConvertOptions = ({ type }: ConvertOptionsProps) => {
       setShowOptions(false);
     }
   }, [files.length]);
+
+  // 맨 처음 isIco가 true인 경우 너비와 높이를 32로 설정
+  useEffect(() => {
+    if (isIco) {
+      setWidth(32);
+      setHeight(32);
+    }
+  }, [isIco]);
 
   // 비율이 선택되었을 때 높이 자동 조정
   useEffect(() => {
@@ -80,79 +93,110 @@ export const ConvertOptions = ({ type }: ConvertOptionsProps) => {
           {/* 이미지 포맷 선택 */}
           <div className="space-y-2">
             <Select
-              searchable
-              searchValue={searchValue}
-              onSearchChange={setSearchValue}
               label="Output Format"
-              description="WebP and AVIF are modern image formats that offer better compression than PNG and JPEG."
+              description="Choose the format you want to convert to."
               data={imageFormats}
               value={format}
-              onChange={setFormat}
+              onChange={(value) => {
+                if (value === 'ico') {
+                  setIsIco(true);
+                  setSelectedRatio('1');
+                } else {
+                  setIsIco(false);
+                  setSelectedRatio(null);
+                }
+                setFormat(value);
+              }}
               placeholder="Select format"
               className="max-w-xs"
             />
           </div>
 
-          {/* Image Quality Settings */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">
-              Image Quality
-            </label>
-            <div className="flex flex-col gap-1">
-              <span className="text-xs text-gray-500">
-                Default: 80% (better quality = larger file size)
-              </span>
-              <Slider
-                value={quality}
-                onChange={setQuality}
-                marks={[
-                  { value: 20, label: '20%' },
-                  { value: 50, label: '50%' },
-                  { value: 80, label: '80%' },
-                  { value: 100, label: '100%' },
-                ]}
-                defaultValue={80}
-                className="max-w-md"
-              />
-            </div>
-          </div>
+          {/* Advanced Options */}
+          <Accordion variant="filled">
+            <Accordion.Item value="advanced option">
+              <Accordion.Control>
+                {isIco ? 'Advanced ICO Options' : 'Advanced Options'}
+              </Accordion.Control>
+              <Accordion.Panel>
+                <div className="space-y-6">
+                  {/* Image Quality Settings */}
+                  {!isIco && (
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        Image Quality
+                      </label>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs text-gray-500">
+                          Default: 80% (better quality = larger file size)
+                        </span>
+                        <Slider
+                          value={quality}
+                          onChange={setQuality}
+                          marks={[
+                            { value: 20, label: '20%' },
+                            { value: 50, label: '50%' },
+                            { value: 80, label: '80%' },
+                            { value: 100, label: '100%' },
+                          ]}
+                          defaultValue={80}
+                          className="max-w-md"
+                        />
+                      </div>
+                    </div>
+                  )}
 
-          {/* 이미지 크기 조정 */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">
-              Resize Image
-            </label>
-            <div className="flex gap-4">
-              <NumberInput
-                placeholder="Width"
-                label="Width (px)"
-                className="w-32"
-                value={width}
-                onChange={handleWidthChange}
-              />
-              <NumberInput
-                placeholder="Height"
-                label="Height (px)"
-                className="w-32"
-                value={height}
-                onChange={handleHeightChange}
-              />
-              <Select
-                label="Aspect Ratio"
-                placeholder="Select ratio"
-                value={selectedRatio}
-                onChange={setSelectedRatio}
-                className="w-40"
-                data={[
-                  { value: '1', label: '1:1 (Square)' },
-                  { value: '1.33333', label: '4:3' },
-                  { value: '1.77778', label: '16:9' },
-                  { value: '0.66667', label: '2:3' },
-                  { value: '1.91', label: '1.91:1 (Instagram)' },
-                ]}
-              />
-            </div>
-          </div>
+                  {/* 이미지 크기 조정 */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Resize Image
+                    </label>
+                    <div className="flex gap-4">
+                      <NumberInput
+                        placeholder="Width"
+                        label="Width (px)"
+                        className="w-32"
+                        value={width}
+                        onChange={handleWidthChange}
+                        disabled={isIco}
+                      />
+                      <NumberInput
+                        placeholder="Height"
+                        label="Height (px)"
+                        className="w-32"
+                        value={height}
+                        onChange={handleHeightChange}
+                        disabled={isIco}
+                      />
+                      {isIco ? (
+                        <Select
+                          label="ICO Size"
+                          placeholder="Select size"
+                          value={selectedIcoSize}
+                          onChange={(value) => {
+                            setSelectedIcoSize(value);
+                            setWidth(Number(value));
+                            setHeight(Number(value));
+                          }}
+                          className="w-40"
+                          data={icoSizes}
+                        />
+                      ) : (
+                        <Select
+                          label="Aspect Ratio"
+                          placeholder="Select ratio"
+                          value={selectedRatio}
+                          onChange={setSelectedRatio}
+                          className="w-40"
+                          data={normalRatios}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </Accordion.Panel>
+            </Accordion.Item>
+          </Accordion>
 
           {/* 변환 버튼 */}
           <Button
@@ -168,6 +212,7 @@ export const ConvertOptions = ({ type }: ConvertOptionsProps) => {
                 height: Number(height),
                 ratio: selectedRatio,
               };
+              console.log(options);
               await handleConvertImages(setIsLoading, files, options);
             }}
           >

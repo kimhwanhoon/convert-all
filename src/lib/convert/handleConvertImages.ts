@@ -1,5 +1,6 @@
 import { ImagesConvertOptions } from '@/types/convertOptions/images';
 import { showNotification } from '@mantine/notifications';
+import { requestSaveLog } from '@/lib/log/requestSaveLog';
 
 export const handleConvertImages = async (
   setIsLoading: (isLoading: boolean) => void,
@@ -77,15 +78,25 @@ export const handleConvertImages = async (
       throw new Error('Failed to convert images');
     }
 
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const blob = await response.blob(),
+      url = window.URL.createObjectURL(blob),
+      a = document.createElement('a');
+
     a.href = url;
     a.download = 'converted_image';
     document.body.appendChild(a);
     a.click();
     a.remove();
     window.URL.revokeObjectURL(url);
+    console.log('downloaded');
+    // 로그 저장 요청
+    const { error, message } = await requestSaveLog();
+    console.log(error, message);
+
+    if (error) {
+      console.log(error);
+    }
+    console.log(message);
 
     setIsLoading(false);
   } catch (error) {

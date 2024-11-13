@@ -15,7 +15,7 @@ export const Logo = () => {
       className={`${styles.container.base} ${styles.container.background} ${styles.container.hover}`}
     >
       <Link href="/" className={styles.text}>
-        convert-all
+        convert images
       </Link>
     </div>
   );

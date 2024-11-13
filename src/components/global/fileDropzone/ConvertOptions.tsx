@@ -93,6 +93,7 @@ export const ConvertOptions = ({ type }: ConvertOptionsProps) => {
           {/* 이미지 포맷 선택 */}
           <div className="space-y-2">
             <Select
+              classNames={{ root: 'w-full md:max-w-xs' }}
               label="Output Format"
               description="Choose the format you want to convert to."
               data={imageFormats}
@@ -108,7 +109,6 @@ export const ConvertOptions = ({ type }: ConvertOptionsProps) => {
                 setFormat(value);
               }}
               placeholder="Select format"
-              className="max-w-xs"
             />
           </div>
 
